@@ -62,6 +62,12 @@ Load the ground reference label.  This is a field observation data on species co
 var landcover= ee.FeatureCollection('projects/ee-richcrabbe/assets/BB-BIRDIES-REFgroundCHECKED');
 print(landcover, 'landcover');
 ```
+Remap the 'label'property to align with default JavaScript format
+```JavaScript
+var landcover = landcover.remap([1, 2], [1, 0], 'label'); // zero is no-bitou and one = bitou
+print(landcover, 'landcover');
+```
+
 
 ### Bitoubush at Birdies Beach
 
