@@ -11,13 +11,6 @@ Google Earth Engine Team
 
 Stacker Overflow
 
-1, set map centre to make map visualisation easy
-
-```JavaScript
-Map.setCenter(151.60,-33.21,14);
-Map.addLayer(mm_rgb, {bands:["b3","b2","b1"], min:0, max:255}, 'RGB Munmorah');
-```
-
 ## **Mapping bitoubush**
 In this section, the data sets required for the project are loaded up into the GEE Code Editor
 The data sets include the SkySat Imagery and a shapefile for the study area (*aka* region of interest-ROI)
@@ -29,15 +22,23 @@ Print the **munmorah** to the Console to inspect the attributes of the image
 ```JavaScript
 print(munmorah);
 ```
+Another image data required was the drone imagery. This is used to define the boundary layer of the project. UAV multipsectral drone was flown to sample the field prior to SkySat acquisition.
+
+Load the UAV imagery to a variable called **mm_uav_ms**
+```JavaScript
+var mm_uav_ms = ee.Image("users/richcrabbe/birdiesBB-MS-ROI");
+print(mm_uav_ms,'Munmorah UAV MS' );
+```
 
 ### Visualisation of the image
 Once you have a good understanding about the image via its attributes, including the number of bands and resolution, the next step is to display the image to view it.
 To do this, use the **Map.addLayer()** function within the GEE
 
 ```JavaScript
-Map.addLayer(munmorah, {bands:["b4","b3","b2"], min:0, max:2000}, 'Skysat RGB Munmuorah');
+Map.addLayer(munmorah, {bands:["b4","b3","b2"], min:0, max:2000}, 'SkySat RGB Munmuorah');
 ````
-You might have observed that in the above code that the bands have been specified in the order of RGB with the R = "b3", G ="b4", and B ="b2". Additionally, the range of brightness values have been specificied as min:0, max:2000. The output layer is labelled as 'Skysat RGB Munmuorah'. This is the name of you would see in the layer manager upon running the code.
+You might have observed that in the above code that the bands have been specified in the order of RGB with the R = "b3", G ="b4", and B ="b2". Note, R= red, G= green, and B= blue band. The computer can display three bands at a time.
+Additionally, the range of brightness values have been specified as min:0, max:2000. The output layer is labelled as 'SkySat RGB Munmuorah'. This is the name of would see in the layer manager upon running the code.
 
 
 ### Bitoubush at Birdies Beach
