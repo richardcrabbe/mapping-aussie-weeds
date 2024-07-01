@@ -2,23 +2,23 @@
 Detection of invasive plants in New South Wales, Australia, using SkySat satellite imagery and Google EarthEngine JavaScript API
 
 
-## mapping bitoubush
+## **Mapping bitoubush**
 
 ```JavaScript
-var skysat = ee.Image('VVVV')
+var munmorah = ee.Image("projects/ee-richcrabbe/assets/mmResize_SR");
 ````
-### bitoubush at Birdie beach
+### Bitoubush at Birdies Beach
 
 
-### bitoubush at Scotts head
-
-
-
-## mapping african lovegrass
+### Bitoubush at Scotts Head
 
 
 
-### alg at cooma
+## **Mapping African Lovegrass (ALG)**
 
 
-### alg at kuma and tsr
+
+### ALG at Cooma, NSW
+
+
+### ALG at Kuma Nature Reserve and TSR, NSW
