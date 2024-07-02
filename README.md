@@ -13,7 +13,12 @@ Stacker Overflow
 
 ## **Mapping bitoubush**
 In this section, the data sets required for the project are loaded up into the GEE Code Editor
-The data sets include the SkySat Imagery and a shapefile for the study area (*aka* region of interest-ROI)
+The data sets include:
+- SkySat satellite imagery for the main analysis
+- UAV imagery over the study area to retrieve the study area (*aka* region of interest-ROI)
+
+**Loading the data sets into EE Code Editor**
+
 The code snippet below loads the SkySat imagery to a variable called **munmorah**
 ```JavaScript
 var munmorah = ee.Image("projects/ee-richcrabbe/assets/mmResize_SR");
