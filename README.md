@@ -80,6 +80,50 @@ var landcover = landcover.remap([1, 2], [1, 0], 'label'); // zero is no-bitou an
 print(landcover, 'landcover');
 ```
 
+### Feature Engineering
+
+We defined a function called `vegetation_indices` that creates a list of vegetation indices from the SkySat Imagery
+
+```JavaScript
+
+var vegetation_indices = function(image) {
+  var blue = image.select('b1'); // selects the blue band only
+  var green = image.select('b2'); // selects the green band
+  var red = image.select('b3');  // selects the red band
+  var nir = image.select('b4'); //selects the near infrared band
+  var ndyi = green.subtract(blue).divide(green.add(blue)).rename('NDYI'); //use this
+  var ndvi = nir.subtract(red).divide(nir.add(red)).rename('NDVI');
+  var rbni = red.subtract(blue).divide(red.add(blue)).rename('RBNI');
+  //var hrfi2 = red.subtract(blue).divide(green.add(blue)).rename('HRFI2');
+  var hrfi = red.subtract(blue).multiply(green.subtract(blue)).rename('HRFI'); //use this
+  var myi = red.multiply(green).divide(blue).rename('MYI'); //use this
+  //add the output of a vegetation index as a band to the original bands of the image and return an image with more bands
+  return image.addBands(ndvi).addBands(ndyi).addBands(rbni).addBands(myi).addBands(hrfi);
+};
+```
+Apply the function to the SkySat imagery and print the result to the Console
+
+```JavaScript
+var engineer_model_features = vegetation_indices(munmorah);
+
+print (engineer_model_features, 'engineer_model_features');
+
+```
+
+* Textural measures using Grey-level Co-occurence Matrix
+
+Extract the NDVI layer
+
+```JavaScript
+var engineer_model_features_NDVI = engineer_model_features.select('NDVI');
+print (engineer_model_features_NDVI, 'engineer_model_features_NDVI');
+Map.addLayer(engineer_model_features_NDVI, {}, "engineer_model_features_NDVI");
+```
+
+
+
+
+
 
 ### Bitoubush at Birdies Beach
 
