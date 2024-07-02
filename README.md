@@ -17,9 +17,13 @@ The data sets include:
 - SkySat satellite imagery for the main analysis
 - UAV imagery over the study area to retrieve the study area (*aka* region of interest-ROI)
 
+|Site | Lat | Lon |
+|---|---|---|
+| Birdies Beach| -33.23352°|151.57426°|
+
 **Loading the data sets into EE Code Editor**
 
-The code snippet below loads the SkySat imagery to a variable called **munmorah**
+The code snippet below loads the SkySat imagery to a variable called `munmorah`
 ```JavaScript
 var munmorah = ee.Image("projects/ee-richcrabbe/assets/mmResize_SR");
 ````
