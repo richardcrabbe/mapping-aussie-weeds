@@ -21,6 +21,9 @@ The data sets include:
 |---|---|---|
 | Birdies Beach| -33.23352°|151.57426°|
 
+Add an image
+![description] (path)
+
 **Loading the data sets into EE Code Editor**
 
 The code snippet below loads the SkySat imagery to a variable called `munmorah`
