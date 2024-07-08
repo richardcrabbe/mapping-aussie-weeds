@@ -1,7 +1,7 @@
 # mapping-aussie-weeds
 Detection of invasive plants in New South Wales, Australia, using SkySat satellite imagery and Google Earth Engine (GEE) JavaScript API
 
-The code snippets cane be copied into GEE Code Editor to run.
+The code snippets can be copied into GEE Code Editor to run.
 
 **Acknowledgements**
 
