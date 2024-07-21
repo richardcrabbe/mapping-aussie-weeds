@@ -246,7 +246,51 @@ var snic = ee.Algorithms.Image.Segmentation.SNIC({
 var snicClusters = snic.select('clusters'); 
 
 ```
-  
+
+### Predictor Variables
+Combine all the features, including spectral bands, vegetation indices, GLCM, and SNIC clusters, to produce a list of predictor variables.
+
+// add the glcm features to the spectral features
+var engineer_model_features=engineer_model_features.addBands(glcmBands_plus_pcaBands.select('0_pc1'));
+//print(engineer_model_features, 'engineer_model_features2'); 
+
+// add the segmentation layer, too
+var engineer_model_features = engineer_model_features.addBands(snicClusters)
+print(engineer_model_features, 'image2classifyNotNormalised');
+
+* Normalise the predictor variables
+
+```JavaScript
+  // this is a function to normalise the input features
+function normalize(image){
+  var bandNames = image.bandNames();
+  // Compute min and max of the image
+  var minDict = image.reduceRegion({
+    reducer: ee.Reducer.min(),
+    geometry: roi,
+    scale: 0.5, 
+    maxPixels: 1e9,
+    bestEffort: true,
+    tileScale: 16
+  });
+  var maxDict = image.reduceRegion({
+    reducer: ee.Reducer.max(),
+    geometry: roi,
+    scale: 0.5,
+    maxPixels: 1e9,
+    bestEffort: true,
+    tileScale: 16
+  });
+  var mins = ee.Image.constant(minDict.values(bandNames));
+  var maxs = ee.Image.constant(maxDict.values(bandNames));
+
+  var normalized = image.subtract(mins).divide(maxs.subtract(mins));
+  return normalized;
+}
+
+// apply the 'normalize' function to normalise the input features
+var composite = normalize(engineer_model_features);
+```  
     
 
 
