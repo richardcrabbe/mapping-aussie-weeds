@@ -291,7 +291,15 @@ function normalize(image){
 // apply the 'normalize' function to normalise the input features
 var composite = normalize(engineer_model_features);
 ```  
-    
+Rename the variables
+```JavaScript
+
+// create a variable that holds the relevant model features; here a more meaning band name is specified.
+var bands= ['Blue', 'Green', 'Red', 'NIR', 'NDVI', 'NDYI', 'RBNI', 'MYI', 'HRFI', 'GLCM','Clusters']
+
+// rename bands
+var composite =composite.rename(bands)
+```` 
 
 
 
