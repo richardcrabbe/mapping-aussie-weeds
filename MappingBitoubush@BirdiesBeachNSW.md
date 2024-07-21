@@ -465,6 +465,39 @@ print('Validation Kappa: ', accuracy2.kappa())
 print('Validation fscore: ', accuracy2.fscore(1))
 
 ```
+### Variable Importance
+The predictor variables were ranked based on their individual performance in discriminating the target classes 
+
+```JavaScript
+// Run .explain() to see what the classifer looks like
+print(optimalModel.explain())
+
+// Calculate variable importance
+var importance = ee.Dictionary(optimalModel.explain().get('importance'))
+
+// Calculate relative importance
+var sum = importance.values().reduce(ee.Reducer.sum())
+
+var relativeImportance = importance.map(function(key, val) {
+   return (ee.Number(val).multiply(100)).divide(sum)
+  })
+print(relativeImportance)
+
+// Create a FeatureCollection so we can chart it
+var importanceFc = ee.FeatureCollection([
+  ee.Feature(null, relativeImportance)
+])
+
+var chart2 = ui.Chart.feature.byProperty({
+  features: importanceFc
+}).setOptions({
+      title: 'Feature Importance',
+      vAxis: {title: 'Importance'},
+      hAxis: {title: 'Feature'}
+  })
+print(chart2)
+
+```
 
 ### Bitoubush at Birdies Beach
 
