@@ -443,12 +443,28 @@ var finalClassification = composite.classify(optimalModel);
   return feature.set({style: {color: mapColours2Use.get(label),fillColor: '00000000'}})}
 
   //apply the function and view the result on base map
-  //var referenceData = landcover.remap([1,2], [0,1], 'class_1') // just so polygon features would be displayed
   var styled = landcover.map(setFeatureProperties)
   Map.addLayer(styled.style({styleProperty: "style"}), {}, 'Reference Areas')
   
   ```
+### Evaluate the RF Model
+The perfromance of the RF model was assessed based on the test sample in that error matrix was computed.\
+The evaluation metrics reported include accuracy, precision, recall, and F-score.
 
+```JavaScript
+var accuracy2 = testSample
+      .classify(optimalModel)
+      .errorMatrix('label', 'classification');
+print(accuracy2, ' accuracy2') 
+
+// assess the performance of the model 
+print('Validation Consumer accuracy: ', accuracy2.consumersAccuracy())
+print('Validation Producer accuracy: ', accuracy2.producersAccuracy())
+print('Validation Overall accuracy: ', accuracy2.accuracy())
+print('Validation Kappa: ', accuracy2.kappa())
+print('Validation fscore: ', accuracy2.fscore(1))
+
+```
 
 ### Bitoubush at Birdies Beach
 
