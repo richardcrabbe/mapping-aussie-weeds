@@ -153,7 +153,65 @@ print (engineer_model_features, 'engineer_model_features');
      var glcm_munmorah_selectedBands = glcm_munmorah.select(['NDVI_asm', 'NDVI_contrast', 'NDVI_corr', 'NDVI_var', 'NDVI_idm', 'NDVI_savg', 'NDVI_ent']);
      print(glcm_munmorah_selectedBands,'glcm_munmorah_selectedBands');
      ```
+* Principal components analysis of the selected GLCM features as they usually highlu corrrelated 
+   * scale the NDVI layer to 8-bits- this is a requirement for Earth Engine to work
+     ```JavaScript
+     var glcm_munmorah_selectedBands =ee.ImageCollection(glcm_munmorah_selectedBands); // this stacks the selected GLCM bands together to produce an image collection
+     print(glcm_munmorah_selectedBands, 'glcm_munmorah_selectedBands');
+     ```
+     PCA starts from here
+     ```JavaScript
+     var Preped = glcm_munmorah_selectedBands.map(function(image){
+  var orig = image;
+  var region = image.geometry();
+  var scale = 0.5;
+  var bandNames = ['NDVI_asm', 'NDVI_contrast', 'NDVI_corr', 'NDVI_var', 'NDVI_idm', 'NDVI_savg', 'NDVI_ent'];
+  var meanDict = image.reduceRegion({
+    reducer: ee.Reducer.mean(),
+    geometry: region,
+    scale: scale,
+    maxPixels: 1e12
+  });
+  var means = ee.Image.constant(meanDict.values(bandNames));
+  var centered = image.subtract(means);
+  var getNewBandNames = function(prefix) {
+  var seq = ee.List.sequence(1, 7);
+  return seq.map(function(b) {
+    return ee.String(prefix).cat(ee.Number(b).int());
+    });
+  };
 
+  // PCA function
+  var getPrincipalComponents = function(centered, scale, region) {
+    var arrays = centered.toArray();
+    var covar = arrays.reduceRegion({
+      reducer: ee.Reducer.centeredCovariance(),
+      geometry: region,
+      scale: scale,
+      maxPixels: 1e12
+    });
+    var covarArray = ee.Array(covar.get('array'));
+    var eigens = covarArray.eigen();
+    var eigenValues = eigens.slice(1, 0, 1);
+    var eigenVectors = eigens.slice(1, 1);
+    var arrayImage = arrays.toArray(1);
+    var principalComponents = ee.Image(eigenVectors).matrixMultiply(arrayImage);
+    var sdImage = ee.Image(eigenValues.sqrt())
+    .arrayProject([0]).arrayFlatten([getNewBandNames('sd')]);
+    return principalComponents.arrayProject([0])
+    .arrayFlatten([getNewBandNames('pc')])
+    .divide(sdImage);
+    };
+// apply the pca function
+  var pcImage = getPrincipalComponents(centered, scale, region);
+  return ee.Image(image.addBands(pcImage));
+});
+print("PCA imagery: ",Preped);
+
+// select pca 1
+var glcmBands_plus_pcaBands = Preped.toBands();
+print('glcmBands_plus_pcaBands', glcmBands_plus_pcaBands);
+     ```
 
 
 
