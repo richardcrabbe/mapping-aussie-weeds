@@ -30,6 +30,7 @@ Add an image
 Caution, the paths for the data sets must be changed to have the code working.
 
 The code snippet below loads the SkySat imagery to a variable called `munmorah`
+
 ```JavaScript
 var munmorah = ee.Image("projects/ee-richcrabbe/assets/mmResize_SR");
 ````
@@ -53,26 +54,28 @@ To do this, use the **Map.addLayer()** function within the GEE
 Map.addLayer(munmorah, {bands:["b4","b3","b2"], min:0, max:2000}, 'SkySat RGB Munmuorah');
 ````
 You might have observed that in the above code that the bands have been specified in the order of RGB with the R = "b3", G ="b4", and B ="b2". Note, R= red, G= green, and B= blue band. The computer can display three bands at a time.
-Additionally, the range of brightness values have been specified as min:0, max:2000. The output layer is labelled as 'SkySat RGB Munmuorah'. This is the name of would see in the layer manager upon running the code.
+Additionally, the range of brightness values have been specified as min:0, max:2000. The output layer is labelled as 'SkySat RGB Munmuorah'. This is the name you would see in the layer manager upon running the code.
 
 ### Define a polygon for the region of interest
 
-In this case, the outline of the UAV image, which covers the study area, was retreived. 
+In this case, the outline of the UAV image, which covers the study area, was retrieved. 
 
 ```JavaScript
-var mm_uav_ms_oneBand = mm_uav_ms.select('b1').toInt(); // selects any of th bands to use, b1 used here
+var mm_uav_ms_oneBand = mm_uav_ms.select('b1').toInt(); // selects any of the bands to use, b1 used here
 var roi= mm_uav_ms_oneBand.reduceToVectors({
   bestEffort: true
   
 });
 ```
 
-Create a symoblogy that makes the polygon geomerty transparent and display outline of the study image 
+Create a symoblogy that makes the polygon geometry transparent and display outline of the study image 
+
 ```JavaScript
 var symbology = {color: 'black', fillColor: '00000000'};
 Map.addLayer(roi.style(symbology), {}, 'Munmorah Geometry');
 ``` 
-Load the ground reference label.  This is a field observation data on species composition. It tells the proportion of bitoubush in the mix
+Load the ground reference label.  This is a field observation data on botanical composition, showing the proportion of bitoubush in the mix
+
 ```JavaScript
 var landcover= ee.FeatureCollection('projects/ee-richcrabbe/assets/BB-BIRDIES-REFgroundCHECKED');
 print(landcover, 'landcover');
@@ -85,10 +88,11 @@ print(landcover, 'landcover');
 
 ### Feature Engineering
 
-We defined a function called `vegetation_indices` that creates a list of vegetation indices from the SkySat Imagery
+The SkySat satellite used in this project has four useful spectral band: R, G, B and NIR. Additional spectral information is required to improve 
+the detectability of the target. Thus, spectral indices sensitive to plants were derived to provide additional spectral information.
+A function called `vegetation_indices` was created to produce a list of vegetation indices from the SkySat Imagery
 
 ```JavaScript
-
 var vegetation_indices = function(image) {
   var blue = image.select('b1'); // selects the blue band only
   var green = image.select('b2'); // selects the green band
