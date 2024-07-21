@@ -209,11 +209,13 @@ var Preped = glcm_munmorah_selectedBands.map(function(image){
   return ee.Image(image.addBands(pcImage));
 });
 
-//print result to the Console
+// print result to the Console
 print("PCA imagery: ",Preped);
 
-// select the first principal component as this explained considerable variations in the data
+// select the first principal component as this explains considerable variations in the data
 var glcmBands_plus_pcaBands = Preped.toBands();
+
+// print the result
 print('glcmBands_plus_pcaBands', glcmBands_plus_pcaBands);
 ```
 
