@@ -117,7 +117,7 @@ print (engineer_model_features, 'engineer_model_features');
 
 ```
 
-* Textural measures using Grey-level Co-occurence Matrix (GLCM)
+* Textural measures using Grey-level Co-occurence Matrix (GLCM)\
   GLCM is used to capture the spatial relationships between the objects in the image. The GLCM analysis requires a single-band image as an input layer.
   The NDVI was used as it is a single-band layer and widely used in several areas, including invasive plant detection. 
 
@@ -219,7 +219,8 @@ var glcmBands_plus_pcaBands = Preped.toBands();
 print('glcmBands_plus_pcaBands', glcmBands_plus_pcaBands);
 ```
 
-* Image Segmentation using the simple non-iterative clustering (SNIC) to produce geographic objects as input variables 
+* Image Segmentation\
+The image was segmented using the simple non-iterative clustering (SNIC) to produce geographic objects to use as input variables 
 
 
   
