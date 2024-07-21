@@ -159,7 +159,7 @@ print (engineer_model_features, 'engineer_model_features');
      var glcm_munmorah_selectedBands =ee.ImageCollection(glcm_munmorah_selectedBands); // this stacks the selected GLCM bands together to produce an image collection
      print(glcm_munmorah_selectedBands, 'glcm_munmorah_selectedBands');
      ```
-     PCA starts from here
+     PCA starts from here.
      Preparing the imagery for PCA
      ```JavaScript
      var Preped = glcm_munmorah_selectedBands.map(function(image) {
