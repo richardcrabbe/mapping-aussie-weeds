@@ -148,19 +148,20 @@ print (engineer_model_features, 'engineer_model_features');
     print(glcm_munmorah, 'glcm_munmorah');
     ```
 * Several GLCM textural bands were produced but based on literature only the bands relevant to the project were selected 
-   * scale the NDVI layer to 8-bits- this is a requirement for Earth Engine to work
+   * select the required GLCM bands and print result to the Console
      ```JavaScript
      var glcm_munmorah_selectedBands = glcm_munmorah.select(['NDVI_asm', 'NDVI_contrast', 'NDVI_corr', 'NDVI_var', 'NDVI_idm', 'NDVI_savg', 'NDVI_ent']);
      print(glcm_munmorah_selectedBands,'glcm_munmorah_selectedBands');
      ```
-* Principal components analysis of the selected GLCM features as they usually highlu corrrelated 
-   * scale the NDVI layer to 8-bits- this is a requirement for Earth Engine to work
+* Principal components analysis of the selected GLCM features as they are usually highly corrrelated 
+   * create an image collection for the selected bands
      ```JavaScript
      var glcm_munmorah_selectedBands =ee.ImageCollection(glcm_munmorah_selectedBands); // this stacks the selected GLCM bands together to produce an image collection
      print(glcm_munmorah_selectedBands, 'glcm_munmorah_selectedBands');
      ```
     
      
+
 
 
   
