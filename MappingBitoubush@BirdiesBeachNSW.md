@@ -305,9 +305,10 @@ var composite =composite.rename(bands)
 ### Creating a Sample of Training Areas in the Image
 ```JavaScript
 
-// load the ground reference data; this data was collected by weed experts through visual assessment of plants, 
-// recorded the botanical composition (in %) and GPS locations of the species. 
-// based on the species composition, a sampling plot (1m x 1m) was labeled as bitoubush or no-bitoubush. 
+/*load the ground reference data; this data was collected by weed experts through visual assessment of plants, 
+recorded the botanical composition (in %) and GPS locations of the species.
+based on the species composition, a sampling plot (1m x 1m) was labeled as bitoubush or no-bitoubush.
+*/
 
 var landcover= ee.FeatureCollection('projects/ee-richcrabbe/assets/BB-BIRDIES-REFgroundCHECKED');
 print(landcover, 'landcover');
