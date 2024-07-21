@@ -2,6 +2,8 @@
 Detection of invasive plants in New South Wales, Australia, using SkySat satellite imagery and Google Earth Engine (GEE) JavaScript API
 
 The code snippets can be copied into GEE Code Editor to run.
+The image data used for the project is available upon request through nii.azu.crabbe@gmail.com
+Unless you have the image data the part of the code that requires loading the datasets might not work for you.
 
 **Acknowledgements**
 
@@ -12,7 +14,7 @@ Google Earth Engine Team
 Stacker Overflow
 
 ## **Mapping bitoubush**
-In this section, the data sets required for the project are loaded up into the GEE Code Editor
+In this section, the data sets required for the project are loaded up into the Code Editor
 The data sets include:
 - SkySat satellite imagery for the main analysis
 - UAV imagery over the study area to retrieve the study area (*aka* region of interest-ROI)
@@ -24,7 +26,8 @@ The data sets include:
 Add an image
 ![description] (path)
 
-**Loading the data sets into EE Code Editor**
+**Loading the data sets into the Code Editor**
+Caution, the paths for the data sets must be changed to have the code working.
 
 The code snippet below loads the SkySat imagery to a variable called `munmorah`
 ```JavaScript
