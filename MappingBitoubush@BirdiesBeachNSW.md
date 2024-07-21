@@ -48,7 +48,7 @@ print(mm_uav_ms,'Munmorah UAV MS' );
 
 ### Visualisation of an imagery
 Once you have a good understanding about the image via its attributes, including the number of bands and resolution, the next step is to display the image to view it.
-To do this, use the **Map.addLayer()** function within the GEE
+To do this, use the **Map.addLayer()** function
 
 ```JavaScript
 Map.addLayer(munmorah, {bands:["b4","b3","b2"], min:0, max:2000}, 'SkySat RGB Munmuorah');
@@ -117,16 +117,28 @@ print (engineer_model_features, 'engineer_model_features');
 
 ```
 
-* Textural measures using Grey-level Co-occurence Matrix
+* Textural measures using Grey-level Co-occurence Matrix (GLCM)
+  GLCM is used to capture the spatial relationships between the objects in the image. The GLCM analysis requires a single-band image as an input layer.
+  The NDVI was used as it is a single-band layer and widely used in several areas, including invasive plant detection. 
 
 Extract the NDVI layer
-
 ```JavaScript
 var engineer_model_features_NDVI = engineer_model_features.select('NDVI');
+
+//print the result to the Console
 print (engineer_model_features_NDVI, 'engineer_model_features_NDVI');
+
+//display the result to the base map
 Map.addLayer(engineer_model_features_NDVI, {}, "engineer_model_features_NDVI");
 ```
+Steps to produce GLCM features
+a, scale the NDVI layer to 8-bits- this is a requirement for Earth Engine work 
 
+```JavaScript
+```
+```JavaScript
+var
+```
 
 
 
