@@ -160,7 +160,8 @@ print (engineer_model_features, 'engineer_model_features');
      print(glcm_munmorah_selectedBands, 'glcm_munmorah_selectedBands');
      ```
     
-```JavaScript     
+```JavaScript
+// prepare the imagery for the pca    
 var Preped = glcm_munmorah_selectedBands.map(function(image){
   var orig = image;
   var region = image.geometry();
@@ -181,8 +182,7 @@ var Preped = glcm_munmorah_selectedBands.map(function(image){
     });
   };
   
-
-  // PCA function
+  // create a PCA function
   var getPrincipalComponents = function(centered, scale, region) {
     var arrays = centered.toArray();
     var covar = arrays.reduceRegion({
@@ -203,11 +203,18 @@ var Preped = glcm_munmorah_selectedBands.map(function(image){
     .arrayFlatten([getNewBandNames('pc')])
     .divide(sdImage);
     };
+
 // apply the pca function
   var pcImage = getPrincipalComponents(centered, scale, region);
   return ee.Image(image.addBands(pcImage));
 });
+
+//print result to the Console
 print("PCA imagery: ",Preped);
+
+// select the first principal component as this explained considerable variations in the data
+var glcmBands_plus_pcaBands = Preped.toBands();
+print('glcmBands_plus_pcaBands', glcmBands_plus_pcaBands);
 ```
 
 
