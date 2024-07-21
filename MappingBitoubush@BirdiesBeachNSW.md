@@ -348,7 +348,44 @@ var landcover2 = landcover2.randomColumn()
 var trainingSample = landcover2.filter('random <= 0.8')// 80% of the data would be for model training
 var testSample = landcover2.filter('random > 0.8')  // 20% of data for model testing
 ``` 
+### Hyperparameter tuning
+The optimal values for the number of trees to grow and out of bag fraction were obtained through a grid search.\
+Only these two hyperparameters were tuned; not only because they have a major influence on the model performance but this was done to save computation time.
 
+```JavaScript
+// a list of number of trees to explore, the number is in incremental by 10
+var numTreesList = ee.List.sequence(10, 150, 10);
+
+//a list of out of bag fractions to use, this is in incremental by 10%
+var bagFractionList = ee.List.sequence(0.1, 0.9, 0.1);
+
+// start tuning for the hyperparameters 
+var accuracies = numTreesList.map(function(numTrees) {
+  return bagFractionList.map(function(bagFraction) {
+    // define an RF using these parameters
+     var classifier = ee.Classifier.smileRandomForest({
+       numberOfTrees: numTrees,
+       bagFraction: bagFraction
+     })
+     // train the RF
+      .train({
+        features: trainingSample,
+        classProperty: 'label',
+        inputProperties: composite.bandNames()
+      });
+
+    // Here we are classifying a table instead of an image
+    // Classifiers work on both images and tables
+    var accuracy = testSample
+      .classify(classifier)
+      .errorMatrix('label', 'classification')
+      .accuracy();
+    return ee.Feature(null, {'accuracy': accuracy,
+      'numberOfTrees': numTrees,
+      'bagFraction': bagFraction})
+  })
+}).flatten()
+```
 
 ### Bitoubush at Birdies Beach
 
