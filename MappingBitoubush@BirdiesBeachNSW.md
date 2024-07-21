@@ -219,6 +219,8 @@ var glcmBands_plus_pcaBands = Preped.toBands();
 print('glcmBands_plus_pcaBands', glcmBands_plus_pcaBands);
 ```
 
+* ### Image Segmentation 
+
 
   
     
