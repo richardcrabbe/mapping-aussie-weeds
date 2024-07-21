@@ -441,6 +441,11 @@ var finalClassification = composite.classify(optimalModel);
   
   // use the class as index to lookup the corresponding display color
   return feature.set({style: {color: mapColours2Use.get(label),fillColor: '00000000'}})}
+
+  //apply the function and view the result on base map
+  //var referenceData = landcover.remap([1,2], [0,1], 'class_1') // just so polygon features would be displayed
+  var styled = landcover.map(setFeatureProperties)
+  Map.addLayer(styled.style({styleProperty: "style"}), {}, 'Reference Areas')
   
   ```
 
