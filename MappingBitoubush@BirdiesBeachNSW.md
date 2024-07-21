@@ -374,8 +374,7 @@ var accuracies = numTreesList.map(function(numTrees) {
         inputProperties: composite.bandNames()
       });
 
-    // Here we are classifying a table instead of an image
-    // Classifiers work on both images and tables
+    // compute error matrix over a classifcation
     var accuracy = testSample
       .classify(classifier)
       .errorMatrix('label', 'classification')
@@ -386,6 +385,31 @@ var accuracies = numTreesList.map(function(numTrees) {
   })
 }).flatten()
 ```
+
+Explore the results of the grid search (i.e., hyperparameter tuning) 
+
+```JavaScript
+//print the accuracies
+print(accuracies, ' ACCURACIES');
+
+// get the result as a feature collection
+var resultFc = ee.FeatureCollection(accuracies)
+print(resultFc, 'resultFc')
+
+// select the parameters that result in the highest accuracy
+var resultFcSorted = resultFc.sort('accuracy', false);
+var highestAccuracyFeature = resultFcSorted.first();
+var highestAccuracy = highestAccuracyFeature.getNumber('accuracy');
+var optimalNumTrees = highestAccuracyFeature.getNumber('numberOfTrees');
+var optimalBagFraction = highestAccuracyFeature.getNumber('bagFraction');
+
+// print the results after the grid search to the Console
+print(highestAccuracy,'highestAccuracy')
+print(optimalNumTrees,'optimalNumTrees')
+print(optimalBagFraction,'optimalBagFraction')
+
+```
+
 
 ### Bitoubush at Birdies Beach
 
