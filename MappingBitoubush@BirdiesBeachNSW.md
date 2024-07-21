@@ -220,9 +220,32 @@ print('glcmBands_plus_pcaBands', glcmBands_plus_pcaBands);
 ```
 
 * Image Segmentation using SNIC \
-Image segmentation would groups pixels of similar spectral characteris to create geographic objects. The multispectral SkySat image was segmented using the simple non-iterative clustering (SNIC) to produce geographic objects to use as input variables 
+Image segmentation would groups pixels of similar spectral characteris to create geographic objects. The multispectral SkySat image was segmented using the simple non-iterative clustering (SNIC) to produce geographic objects to use as input variables.
 
+```JavaScript
+ // define the seed image 
+var snic_seeds = ee.Algorithms.Image.Segmentation.seedGrid({
+  size:20,
+  gridType:"square"
+  });
 
+// apply the SNIC algorithm to segment the skysat imagery
+var snic = ee.Algorithms.Image.Segmentation.SNIC({
+  image: munmorah,
+  compactness: 0,
+  connectivity: 8,
+  neighborhoodSize: 256,
+  //size: 3,
+  seeds: snic_seeds
+}).reproject({
+  crs: 'EPSG:32756',
+  scale: 0.5
+});
+
+// select the clusters, the result of the SNIC segmentation
+var snicClusters = snic.select('clusters'); 
+
+```
   
     
 
