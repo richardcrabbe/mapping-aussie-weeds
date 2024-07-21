@@ -250,6 +250,7 @@ var snicClusters = snic.select('clusters');
 ### Predictor Variables
 Combine all the features, including spectral bands, vegetation indices, GLCM, and SNIC clusters, to produce a list of predictor variables.
 
+```JavaScript
 // add the glcm features to the spectral features
 var engineer_model_features=engineer_model_features.addBands(glcmBands_plus_pcaBands.select('0_pc1'));
 //print(engineer_model_features, 'engineer_model_features2'); 
@@ -257,6 +258,7 @@ var engineer_model_features=engineer_model_features.addBands(glcmBands_plus_pcaB
 // add the segmentation layer, too
 var engineer_model_features = engineer_model_features.addBands(snicClusters)
 print(engineer_model_features, 'image2classifyNotNormalised');
+```
 
 * Normalise the predictor variables
 
