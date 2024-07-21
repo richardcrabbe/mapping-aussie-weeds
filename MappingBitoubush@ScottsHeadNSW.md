@@ -198,27 +198,13 @@ var snic = ee.Algorithms.Image.Segmentation.SNIC({
   crs: 'EPSG:32756',
   scale: 0.5
 });
-//print (snic, 'SNIC result');
-//Map.addLayer(snic.randomVisualizer(), null, "snic");
 
 var snicClusters = snic.select('clusters'); 
-//Map.addLayer(snicClusters .randomVisualizer(), null, "snicClusters ");
 
 // add the segmentation layer
 var engineer_model_features = engineer_model_features.addBands(snicClusters)
 
 print(engineer_model_features, 'engineer_model_features2'); 
-
-
-
-/*
-//rename bands
-var composite =composite.rename(bands)
-
-// clip the image to roi
-var composite = composite.clip(roi)
-*/
-
 
 // normalise the image to use. this is a function to do this
 function normalize(image){
@@ -261,14 +247,6 @@ Export.image.toAsset({
   description: 'GEEappScottsHeadImage2Classify',
   assetId: 'projects/ee-richcrabbe/assets/GEEappScottsHeadImage2Classify'
 });
-
-
-// create a variable that holds the relevant model features
-//var bands = ['Blue', 'Green', 'Red', 'NIR', 'NDVI', 'NDYI', 'RBNI', 'MYI', 'HRFI', 'GLCM']
-
-// create a variable that holds the relevant model features
-//var bands = ['b1', 'b2', 'b3', 'b4', 'NDVI', 'HRFI 2', 'MYI','0_pc1']; 
-
 
 // sample training areas
 var landcover2 = composite.sampleRegions({
@@ -326,8 +304,7 @@ var accuracies = numTreesList.map(function(numTrees) {
         inputProperties:  composite.bandNames()
       });
 
-    // Here we are classifying a table instead of an image
-    // Classifiers work on both images and tables
+    // compute error matrix 
     var accuracy = testSample
       .classify(classifier)
       .errorMatrix('class_1', 'classification')
@@ -356,15 +333,6 @@ print(highestAccuracy,'highestAccuracy')
 print(optimalNumTrees,'optimalNumTrees')
 print(optimalBagFraction,'optimalBagFraction')
 
-// Export the result as CSV
-Export.table.toDrive({
-  collection: resultFc,
-  description: 'Multiple_Parameter_Tuning_Results',
-  folder: 'CSU',
-  fileNamePrefix: 'numtrees_bagfraction',
-  fileFormat: 'CSV'});
-
-
 // Use the optimal parameters in a model and perform final classification
 var optimalModel = ee.Classifier.smileRandomForest({
   numberOfTrees: optimalNumTrees, //used the one from Birdies Beach
@@ -379,33 +347,12 @@ var optimalModel = ee.Classifier.smileRandomForest({
 // classify the image
 var finalClassification = composite.classify(optimalModel);
 
-//export RF classifier to use later
-Export.classifier.toAsset({
-  classifier: optimalModel,
-  description: 'GEEappScottsHeadRFclassifier',
-  assetId: 'projects/ee-richcrabbe/assets/GEEappScottsHeadRFclassifier'
-});
-
 // apply the model to classify the image
 var finalClassification = composite.classify(optimalModel);
 
-// export the classification image to GEE assests
-// create a visualisation parameter, where colour red = bitou bush and colour green = non-target
-var viz_1 = {min: 0, max: 1, palette: ['green', 'red']};
-
-// export the classification image to GEE assests
-Export.image.toAsset({
-  image: finalClassification.visualize(viz_1),
-  description: 'GEEappScottsHeadClassifiedImage',
-  assetId: 'projects/ee-richcrabbe/assets/GEEappScottsHeadClassifiedImage'  
-  //region: region,
-  //crsTransform: [30, 0, -2493045, 0, -30, 3310005],
-  //crs: 'EPSG:5070'
-});
-
 // display the classified image
 Map.setCenter(152.9881334183168,-30.734091023014066, 22)
-Map.addLayer(finalClassification, {min: 0, max: 1, palette: ['green', 'red']}, 'Random Forest Classification of ALG'); // just to reiterate that 0 = low infestation 1=high inffestation
+Map.addLayer(finalClassification, {min: 0, max: 1, palette: ['green', 'red']}, 'Random Forest Classification of ALG'); 
 //Map.addLayer(landcover, {}, 'reference data')
 
 // display the reference features with each class coloured differently- 
@@ -419,14 +366,11 @@ var setFeatureProperties = function(feature){
 }
 
 // apply the function and view the results on map
-//var referenceData = landcover.remap([1,2], [0,1], 'class_1') // just so polygon features would be displayed
 var styled = landcover.map(setFeatureProperties)
 Map.setCenter(152.988,-30.732, 16)
 Map.addLayer(styled.style({styleProperty: "style"}), {}, 'Reference Areas')
 
-
-
-// assesss performance of the optimal model 
+// appraise performance of the model 
 var accuracy2 = testSample
       .classify(optimalModel)
       .errorMatrix('class_1', 'classification')
@@ -438,12 +382,6 @@ print('Validation Consumer accuracy: ', accuracy2.consumersAccuracy())
 print('Validation Producer accuracy: ', accuracy2.producersAccuracy())
 print('Validation Kappa: ', accuracy2.kappa())
 print('Validation fscore: ', accuracy2.fscore(1))
-
-
-///// post-hoc analysis //////////////////////////////////////////
-
-//optional- apply spatial filter to the classified image to remove speckles
-
 
 //************************************************************************** 
 // Feature Importance
@@ -477,49 +415,8 @@ var chart2 = ui.Chart.feature.byProperty({
   })
 print(chart2)
 
+// end of code
+print('End of Code')
 
-// chart the accuracy metrics
-// make arrays
-var overallAccuracy = accuracy2.accuracy()
-var precision = ee.Number(accuracy2.producersAccuracy().get([0,0])).multiply(100)
-var recall = ee.Number(accuracy2.consumersAccuracy().get([0,0])).multiply(100)
-var fscore = ee.Number(accuracy2.fscore().get([0])).multiply(100)
-
-//var array1 = [precision, recall, fscore]
-//print(precision, 'precision')
-//print(recall, 'recall')
-//print(fscore, 'fscore')
-
-//print(array1, 'array1')
-var precision2 = ee.Number(accuracy2.producersAccuracy().get([-1,-1])).multiply(100)
-var recall2 = ee.Number(accuracy2.consumersAccuracy().get([-1,-1])).multiply(100)
-var fscore2 = ee.Number(accuracy2.fscore().get([1])).multiply(100)
-//print(precision2, 'precision2')
-//print(recall2, 'recall2')
-//print(fscore2, 'fscore2')
-
-
-var dataTable = [
- ['Metric', " No-Infestation", "High-Infestation"],
-  ['Precision', precision.getInfo(), precision2.getInfo() ],  //precision.getInfo() 100,86
-  ['Recall', 
-  recall.getInfo(), recall2.getInfo()], // 85, 100
-  ['F-score', fscore.getInfo(), fscore2.getInfo()], // 92,93
-];
-
-//var data = new google.visualization.DataTable();
-//print(data, 'data')
-//print(dataTable,'dataTable' )
-
-
-// Define the chart and print it to the console.
-var chart = ui.Chart(dataTable).setChartType('ColumnChart').setOptions({
-  title: 'Estimating Bitou Bush Infestation\n Using Random Forest Classification',
-  //legend: {position: 'none'},
-  hAxis: {title: 'Metric', titleTextStyle: {italic: false, bold: true}},
-  vAxis: {viewWindow: {min: 50, max: 100},title: 'Accuracy (%)', titleTextStyle: {italic: false, bold: true}}
-  //colors: ['red']
-});
-print(chart);
 
 ```
