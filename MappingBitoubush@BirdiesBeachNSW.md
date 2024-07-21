@@ -348,7 +348,13 @@ var landcover2 = landcover2.randomColumn()
 var trainingSample = landcover2.filter('random <= 0.8')// 80% of the data would be for model training
 var testSample = landcover2.filter('random > 0.8')  // 20% of data for model testing
 ``` 
-### Hyperparameter tuning
+
+Now that predictor variables and label data (training and test samples) are analysis ready, the machine learning classification models would be explored\
+The machine learning algorithms utilised were Support Vector Machine (SVM), Random Forest (RF), and Gradient Boosting (GB)
+
+#### Random Forest Classification
+
+##### * Hyperparameter tuning
 The optimal values for the number of trees to grow and out of bag fraction were obtained through a grid search.\
 Only these two hyperparameters were tuned; not only because they have a major influence on the model performance but this was done to save computation time.
 
@@ -409,7 +415,7 @@ print(optimalNumTrees,'optimalNumTrees')
 print(optimalBagFraction,'optimalBagFraction')
 
 ```
-### Create a Random Forest Classification Model
+##### * Create a Random Forest Classification Model
 ```JavaScript
 // use the optimal parameters in a model and perform final classification
 var optimalModel = ee.Classifier.smileRandomForest({
@@ -447,7 +453,7 @@ var finalClassification = composite.classify(optimalModel);
   Map.addLayer(styled.style({styleProperty: "style"}), {}, 'Reference Areas')
   
   ```
-### Evaluate the RF Model
+##### * Evaluate the RF Model
 The perfromance of the RF model was assessed based on the test sample in that error matrix was computed.\
 The evaluation metrics reported include accuracy, precision, recall, and F-score.
 
@@ -465,7 +471,7 @@ print('Validation Kappa: ', accuracy2.kappa())
 print('Validation fscore: ', accuracy2.fscore(1))
 
 ```
-### Variable Importance
+##### * Variable Importance
 The predictor variables were ranked based on their individual performance in discriminating the target classes 
 
 ```JavaScript
