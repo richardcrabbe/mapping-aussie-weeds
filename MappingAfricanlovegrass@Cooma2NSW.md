@@ -229,10 +229,6 @@ var bands= ['Blue', 'Green', 'Red', 'NIR', 'NDVI', 'NDYI', 'RBNI', 'MYI', 'HRFI'
 var composite =composite.rename(bands)
 print(composite, 'imageComposite')
 
-// clip the image up
-//var composite = composite.clip(kumaTSR_ROI)
-
-
 // sample for training areas
 var landcover2 = composite.sampleRegions({
   collection: landcover,
@@ -251,7 +247,7 @@ var landcoverClass2 = landcover2.filter(ee.Filter.eq('class_1', 1))
 print(landcoverClass1.size(), 'landcover1'); 
 print(landcoverClass2.size(), 'landcover2');
 
-// limit the size to that of the class 1
+// limit class size to that of the class 1
 var landcoverClass2 = landcoverClass2.limit(78)
 
 // merge the feature collection
@@ -335,7 +331,6 @@ Export.classifier.toAsset({
 
 // classify the image
 var finalClassification = composite.classify(optimalModel);
-//print(finalClassification, 'finalClassification')
 
 // display the classified image
 Map.addLayer(finalClassification, {min: 0, max: 1, palette: ['green', 'red']}, 'Random Forest Classification of ALG'); // just to reiterate that 0 = no-infestation 1 = high-infestation
