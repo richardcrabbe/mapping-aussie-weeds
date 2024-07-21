@@ -219,7 +219,7 @@ var glcmBands_plus_pcaBands = Preped.toBands();
 print('glcmBands_plus_pcaBands', glcmBands_plus_pcaBands);
 ```
 
-* ### Image Segmentation 
+* Textural measures using Image Segmentation using the simple non-iterative clustering (SNIC) to produce geographic objects as input variables 
 
 
   
