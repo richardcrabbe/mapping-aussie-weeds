@@ -124,8 +124,10 @@ print (engineer_model_features, 'engineer_model_features');
   * Extract the NDVI layer
     ```JavaScript
     var engineer_model_features = vegetation_indices(munmorah);
+    
     //print the layer to the Console
     print (engineer_model_features_NDVI, 'engineer_model_features_NDVI');
+    
     //add the layer to the base map
     Map.addLayer(engineer_model_features_NDVI, {}, "engineer_model_features_NDVI");
     ```
@@ -144,6 +146,12 @@ print (engineer_model_features, 'engineer_model_features');
     ```JavaScript
     var glcm_munmorah = engineer_model_features_NDVI_8bits.glcmTexture({size: 3});
     print(glcm_munmorah, 'glcm_munmorah');
+    ```
+Several GLCM textural bands were produced but based on literature only the bands relevant to the project were selected 
+ * scale the NDVI layer to 8-bits- this is a requirement for Earth Engine to work
+    ```JavaScript
+    var glcm_munmorah_selectedBands = glcm_munmorah.select(['NDVI_asm', 'NDVI_contrast', 'NDVI_corr', 'NDVI_var', 'NDVI_idm', 'NDVI_savg', 'NDVI_ent']);
+    print(glcm_munmorah_selectedBands,'glcm_munmorah_selectedBands');
     ```
 
 
