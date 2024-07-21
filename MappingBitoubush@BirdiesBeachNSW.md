@@ -219,8 +219,8 @@ var glcmBands_plus_pcaBands = Preped.toBands();
 print('glcmBands_plus_pcaBands', glcmBands_plus_pcaBands);
 ```
 
-* Image Segmentation\
-The image was segmented using the simple non-iterative clustering (SNIC) to produce geographic objects to use as input variables 
+* Image Segmentation using SNIC \
+Image segmentation would groups pixels of similar spectral characteris to create geographic objects. The multispectral SkySat image was segmented using the simple non-iterative clustering (SNIC) to produce geographic objects to use as input variables 
 
 
   
