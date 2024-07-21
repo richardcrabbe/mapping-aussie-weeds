@@ -436,8 +436,7 @@ var finalClassification = composite.classify(optimalModel);
   Map.addLayer(finalClassification.clip(roi), {min: 0, max: 1, palette: ['green', 'red']}, 'Random Forest Classification of Bitou');
 
   // display the reference features with each class coloured differently-function to conditionally set properties of feature collection
-  var setFeatureProperties = function(feature){ 
-  var label = feature.get("class_1") 
+  var setFeatureProperties = function(feature){var label = feature.get("class_1")
   var mapColours2Use = ee.List(['yellow', 'black']); 
   
   // use the class as index to lookup the corresponding display color
