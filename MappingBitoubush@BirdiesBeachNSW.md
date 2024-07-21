@@ -165,21 +165,21 @@ print (engineer_model_features, 'engineer_model_features');
         var orig = image;
         var region = image.geometry();
         var scale = 0.5;
-  var bandNames = ['NDVI_asm', 'NDVI_contrast', 'NDVI_corr', 'NDVI_var', 'NDVI_idm', 'NDVI_savg', 'NDVI_ent'];
-  var meanDict = image.reduceRegion({
-    reducer: ee.Reducer.mean(),
+        var bandNames = ['NDVI_asm', 'NDVI_contrast', 'NDVI_corr', 'NDVI_var', 'NDVI_idm', 'NDVI_savg', 'NDVI_ent'];
+        var meanDict = image.reduceRegion({
+     reducer: ee.Reducer.mean(),
     geometry: region,
     scale: scale,
     maxPixels: 1e12
   });
-  var means = ee.Image.constant(meanDict.values(bandNames));
-  var centered = image.subtract(means);
-  var getNewBandNames = function(prefix) {
-  var seq = ee.List.sequence(1, 7);
-  return seq.map(function(b) {
-    return ee.String(prefix).cat(ee.Number(b).int());
-    });
-  };
+        var means = ee.Image.constant(meanDict.values(bandNames));
+        var centered = image.subtract(means);
+        var getNewBandNames = function(prefix) {
+        var seq = ee.List.sequence(1, 7);
+        return seq.map(function(b)
+         {return ee.String(prefix).cat(ee.Number(b).int());
+          });
+        };
 
   // PCA function
   var getPrincipalComponents = function(centered, scale, region) {
