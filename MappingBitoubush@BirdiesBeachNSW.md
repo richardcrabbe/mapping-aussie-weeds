@@ -300,9 +300,28 @@ var bands= ['Blue', 'Green', 'Red', 'NIR', 'NDVI', 'NDYI', 'RBNI', 'MYI', 'HRFI'
 // rename bands
 var composite =composite.rename(bands)
 ```` 
+### Creating a Sample of Training Areas in the Image
+```JavaScript
 
+// load the ground reference data; this data was collected by weed experts through visual assessment of plants, 
+// recorded the botanical composition (in %) and GPS locations of the species. 
+// based on the species composition, a sampling plot (1m x 1m) was labeled as bitoubush or no-bitoubush. 
 
+var landcover= ee.FeatureCollection('projects/ee-richcrabbe/assets/BB-BIRDIES-REFgroundCHECKED');
+print(landcover, 'landcover');
 
+// remap the 'label'property to align with default JavaScript format
+var landcover = landcover.remap([1, 2], [1, 0], 'label'); // 0 = no-bitoubush and 1 = bitoubush
+print(landcover, 'landcover'); // note, there were more cases for no-bitoubush 
+
+// sample training areas so spectral information can be assigned to each pixel
+var landcover2 = composite.sampleRegions({
+  collection: landcover,
+  properties: ['label'],
+  geometries:true,
+  scale: 0.5
+});
+```
 
 
 
