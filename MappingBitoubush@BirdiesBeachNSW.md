@@ -121,7 +121,7 @@ print (engineer_model_features, 'engineer_model_features');
   GLCM is used to capture the spatial relationships between the objects in the image. The GLCM analysis requires a single-band image as an input layer.
   The NDVI was used as it is a single-band layer and widely used in several areas, including invasive plant detection. 
 
-Extract the NDVI layer
+  * Extract the NDVI layer
 ```JavaScript
 var engineer_model_features_NDVI = engineer_model_features.select('NDVI');
 
@@ -131,14 +131,26 @@ print (engineer_model_features_NDVI, 'engineer_model_features_NDVI');
 //display the result to the base map
 Map.addLayer(engineer_model_features_NDVI, {}, "engineer_model_features_NDVI");
 ```
-Steps to produce GLCM features
-a, scale the NDVI layer to 8-bits- this is a requirement for Earth Engine work 
+  * scale the NDVI layer to 8-bits- this is a requirement for Earth Engine to work
+   ```JavaScript
+   var engineer_model_features_NDVI_8bits = engineer_model_features_NDVI.unitScale(-1, 1).multiply(255).toByte();
+   ```
+  * define a neighborhood with a square kernel, here, 3x3 kernel size is used to preserve spatial details
 
-```JavaScript
-```
-```JavaScript
-var
-```
+    ```JavaScript
+    var square_munmorah = ee.Kernel.square({radius: 3}); 
+    ```
+  * compute the GLCM and print the result to the Console
+
+   ```JavaScript
+    var glcm_munmorah = engineer_model_features_NDVI_8bits.glcmTexture({size: 3});
+    print(glcm_munmorah, 'glcm_munmorah');
+
+    ```
+
+
+
+
 
 
 
