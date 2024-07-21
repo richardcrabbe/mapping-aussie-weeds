@@ -409,6 +409,42 @@ print(optimalNumTrees,'optimalNumTrees')
 print(optimalBagFraction,'optimalBagFraction')
 
 ```
+### Create a Random Forest Classification Model
+```JavaScript
+// use the optimal parameters in a model and perform final classification
+var optimalModel = ee.Classifier.smileRandomForest({
+  numberOfTrees: optimalNumTrees,
+  bagFraction: optimalBagFraction
+}).train({
+  features: trainingSample,  
+  classProperty: 'label',
+  inputProperties: composite.bandNames()
+});
+
+```
+### Classify the imagery using the RF Model
+```JavaScript
+var finalClassification = composite.classify(optimalModel);
+```
+* Explore the classification image
+
+  ```JavaScript
+  // display the classification image, clip this to the ROI
+  
+  Map.setCenter(151.60,-33.21,14);
+  
+  Map.addLayer(finalClassification.clip(roi), {min: 0, max: 1, palette: ['green', 'red']}, 'Random Forest Classification of Bitou');
+
+  // display the reference features with each class coloured differently-function to conditionally set properties of feature collection
+  var setFeatureProperties = function(feature){ 
+  var label = feature.get("class_1") 
+  var mapColours2Use = ee.List(['yellow', 'black']); 
+  
+  // use the class as index to lookup the corresponding display color
+  return feature.set({style: {color: mapColours2Use.get(label),fillColor: '00000000'}})
+}
+  
+  ```
 
 
 ### Bitoubush at Birdies Beach
