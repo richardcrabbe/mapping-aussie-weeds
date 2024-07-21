@@ -122,15 +122,15 @@ print (engineer_model_features, 'engineer_model_features');
   The NDVI was used as it is a single-band layer and widely used in several areas, including invasive plant detection. 
 
   * Extract the NDVI layer
-```JavaScript
-var engineer_model_features_NDVI = engineer_model_features.select('NDVI');
+    ```JavaScript
+    var engineer_model_features = vegetation_indices(munmorah);
+    //print the layer to the Console
+    print (engineer_model_features_NDVI, 'engineer_model_features_NDVI');
+    //add the layer to the base map
+    Map.addLayer(engineer_model_features_NDVI, {}, "engineer_model_features_NDVI");
+    ```
+  
 
-//print the result to the Console
-print (engineer_model_features_NDVI, 'engineer_model_features_NDVI');
-
-//display the result to the base map
-Map.addLayer(engineer_model_features_NDVI, {}, "engineer_model_features_NDVI");
-```
   * scale the NDVI layer to 8-bits- this is a requirement for Earth Engine to work
    ```JavaScript
    var engineer_model_features_NDVI_8bits = engineer_model_features_NDVI.unitScale(-1, 1).multiply(255).toByte();
