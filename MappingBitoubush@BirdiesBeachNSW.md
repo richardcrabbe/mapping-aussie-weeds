@@ -162,9 +162,9 @@ print (engineer_model_features, 'engineer_model_features');
      PCA starts from here
      ```JavaScript
      var Preped = glcm_munmorah_selectedBands.map(function(image){
-  var orig = image;
-  var region = image.geometry();
-  var scale = 0.5;
+        var orig = image;
+        var region = image.geometry();
+        var scale = 0.5;
   var bandNames = ['NDVI_asm', 'NDVI_contrast', 'NDVI_corr', 'NDVI_var', 'NDVI_idm', 'NDVI_savg', 'NDVI_ent'];
   var meanDict = image.reduceRegion({
     reducer: ee.Reducer.mean(),
