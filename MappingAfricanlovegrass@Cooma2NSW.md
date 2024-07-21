@@ -90,18 +90,12 @@ var engineer_model_features = vegetation_indices(img_kuma_tsr);
 
 // extract the NDVI band
 var engineer_model_features_NDVI = engineer_model_features.select('NDVI');
-//print (engineer_model_features_NDVI, 'engineer_model_features_NDVI');
-//Map.addLayer(engineer_model_features_NDVI, {}, "engineer_model_features_NDVI");
-
-
-
-// define a neighborhood with a kernel
 
 // scale the NDVI to 8-bits as this is required for glcm to work
 var engineer_model_features_NDVI_8bits = engineer_model_features_NDVI.unitScale(-1, 1).multiply(255).toByte();
 var square_munmorah = ee.Kernel.square({radius: 3});
 
-// Compute the gray-level co-occurrence matrix (GLCM)
+// compute the gray-level co-occurrence matrix (GLCM)
 var glcm_munmorah = engineer_model_features_NDVI_8bits.glcmTexture({size: 3});
 
 //select the relevant glcm bands and print this to the Console
@@ -111,8 +105,7 @@ print(glcm_munmorah_selectedBands,'glcm_munmorah_selectedBands');
 // make the glcm data an image collection to be used for the pca
 var glcm_munmorah_selectedBands =ee.ImageCollection(glcm_munmorah_selectedBands);
 
-
-// Principal components analysis
+// principal components analysis
 // Preparing imagery for PCA
 var Preped = glcm_munmorah_selectedBands.map(function(image){
   var orig = image;
@@ -161,7 +154,7 @@ var Preped = glcm_munmorah_selectedBands.map(function(image){
   return ee.Image(image.addBands(pcImage));
 });
 
-//print("PCA imagery: ",Preped);
+// print("PCA imagery: ",Preped);
 
 // select pca 1
 var glcmBands_plus_pcaBands = Preped.toBands();
@@ -186,7 +179,6 @@ var snic = ee.Algorithms.Image.Segmentation.SNIC({
 
 
 var snicClusters = snic.select('clusters'); 
-//Map.addLayer(snicClusters .randomVisualizer(), null, "snicClusters ");
 
 // image to classify but not normalised
 var engineer_model_features=engineer_model_features.addBands(glcmBands_plus_pcaBands.select('0_pc1'));
@@ -196,7 +188,7 @@ print(engineer_model_features, 'engineer_model_features2');
 var engineer_model_features = engineer_model_features.addBands(snicClusters)
 print(engineer_model_features, 'image2classifyNotNormalised');
 
-// normalise the image to use for the classification. below is a function to do so:
+// normalise the image to use for the classification. below is a function to do so
 function normalize(image){
   var bandNames = image.bandNames();
   // Compute min and max of the image
@@ -237,9 +229,6 @@ var bands= ['Blue', 'Green', 'Red', 'NIR', 'NDVI', 'NDYI', 'RBNI', 'MYI', 'HRFI'
 var composite =composite.rename(bands)
 print(composite, 'imageComposite')
 
-// create a variable that holds the relevant model features
-//var bands = ['b1', 'b2', 'b3', 'b4', 'NDVI', 'NDYI', 'RBNI', 'MYI', 'HRFI', '0_pc1']; 
-
 // clip the image up
 //var composite = composite.clip(kumaTSR_ROI)
 
@@ -247,7 +236,7 @@ print(composite, 'imageComposite')
 // sample for training areas
 var landcover2 = composite.sampleRegions({
   collection: landcover,
-  properties: ['class_1'], // remember you changed this from ' label' 
+  properties: ['class_1'], 
   scale: 0.5
   //tileScale: 16
 });
@@ -269,6 +258,7 @@ var landcoverClass2 = landcoverClass2.limit(78)
 var landcover3 = landcoverClass2 .merge(landcoverClass1)
 print(landcover3, 'landcover3')
 
+//partition label data into training and test samples
 landcover3 = landcover3.randomColumn()
 var trainingSample = landcover3.filter('random <= 0.8')
 var testSample = landcover3.filter('random > 0.8')
@@ -277,13 +267,6 @@ print(testSample, 'testSample')
 //************************************************************************** 
 // Hyperparameter Tuning
 //************************************************************************** 
-
-// selected bands to apply
-//var bands2= ['Blue', 'Green', 'Red', 'NIR', 'NDVI',  'RBNI',  'HRFI', 'GLCM']
-
-// hyper-parameter tuning. we tuned 'numTrees' and 'bagFraction'
-
-
 // a list of number of trees to explore. the number is in incremental by 10
 var numTreesList = ee.List.sequence(10, 150, 10);
 
@@ -355,7 +338,6 @@ var finalClassification = composite.classify(optimalModel);
 //print(finalClassification, 'finalClassification')
 
 // display the classified image
-//Map.setCenter(149.16463983008765,-36.26771713238252, 22)
 Map.addLayer(finalClassification, {min: 0, max: 1, palette: ['green', 'red']}, 'Random Forest Classification of ALG'); // just to reiterate that 0 = no-infestation 1 = high-infestation
 
 // display the reference features with each class coloured differently- 
@@ -377,10 +359,9 @@ Map.addLayer(styled.style({styleProperty: "style"}), {}, 'Reference Areas')
 var accuracy2 = testSample
       .classify(optimalModel)
       .errorMatrix('class_1', 'classification')
-
 print(accuracy2.array(), 'accuracy2')
 
-//Print the user's accuracy to the console
+// print the user's accuracy to the console
 print('Validation Overall accuracy: ', accuracy2.accuracy())
 print('Validation Consumer accuracy: ', accuracy2.consumersAccuracy())
 print('Validation Producer accuracy: ', accuracy2.producersAccuracy())
@@ -401,7 +382,7 @@ var relativeImportance = importance.map(function(key, val) {
   })
 print(relativeImportance)
 
-// Create a FeatureCollection so we can chart it
+// create a FeatureCollection so we can chart it
 var importanceFc = ee.FeatureCollection([
   ee.Feature(null, relativeImportance)
 ])
@@ -414,6 +395,7 @@ var chart2 = ui.Chart.feature.byProperty({
       hAxis: {title: 'Feature'}
   })
 print(chart2)
+
 print('End of Code')
 
 ```
