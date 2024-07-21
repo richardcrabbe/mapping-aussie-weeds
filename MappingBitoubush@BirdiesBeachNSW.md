@@ -325,11 +325,29 @@ var landcover2 = composite.sampleRegions({
   scale: 0.5
 });
 ```
+### Make the class size to be equal 
+```JavaScript
+// filter the training areas by class to examine the number of cases or pixels for each class
+var landcoverClass1 = landcover2.filter(ee.Filter.eq('label', 0))
+var landcoverClass2 = landcover2.filter(ee.Filter.eq('label', 1))
+print(landcoverClass1.size(), 'landcover1'); // shows the number of cases in for class 1
+print(landcoverClass2.size(), 'landcover2'); // shows the number of cases in for class 2
 
+// the number of cases were uneven, so match the size of class 2 to class 1
+var landcoverClass1 = landcoverClass1.limit(364)
 
+// merge the feature collection
+var landcover2 = landcoverClass2.merge(landcoverClass1)
+```
 
+### Partition data to training and test samples  
 
-
+```JavaScript
+// partition training areas into training and test sets: apply 80-20 rule
+var landcover2 = landcover2.randomColumn()
+var trainingSample = landcover2.filter('random <= 0.8')// 80% of the data would be for model training
+var testSample = landcover2.filter('random > 0.8')  // 20% of data for model testing
+``` 
 
 
 ### Bitoubush at Birdies Beach
