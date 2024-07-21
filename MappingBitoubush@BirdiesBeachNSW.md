@@ -160,6 +160,7 @@ print (engineer_model_features, 'engineer_model_features');
      print(glcm_munmorah_selectedBands, 'glcm_munmorah_selectedBands');
      ```
      PCA starts from here
+     Preparing the imagery for PCA
      ```JavaScript
      var Preped = glcm_munmorah_selectedBands.map(function(image) {
      var orig = image;
