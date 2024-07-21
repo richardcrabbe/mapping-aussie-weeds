@@ -129,11 +129,10 @@ print (engineer_model_features, 'engineer_model_features');
     //add the layer to the base map
     Map.addLayer(engineer_model_features_NDVI, {}, "engineer_model_features_NDVI");
     ```
-  
 
   * scale the NDVI layer to 8-bits- this is a requirement for Earth Engine to work
     ```JavaScript
-   var engineer_model_features_NDVI_8bits = engineer_model_features_NDVI.unitScale(-1, 1).multiply(255).toByte();
+    var engineer_model_features_NDVI_8bits = engineer_model_features_NDVI.unitScale(-1, 1).multiply(255).toByte();
     ```
   * define a neighborhood with a square kernel, here, 3x3 kernel size is used to preserve spatial details
 
@@ -145,8 +144,9 @@ print (engineer_model_features, 'engineer_model_features');
     ```JavaScript
     var glcm_munmorah = engineer_model_features_NDVI_8bits.glcmTexture({size: 3});
     print(glcm_munmorah, 'glcm_munmorah');
+    ```
 
-     ```
+
 
 
 
