@@ -453,7 +453,7 @@ var finalClassification = composite.classify(optimalModel);
   Map.addLayer(styled.style({styleProperty: "style"}), {}, 'Reference Areas')
   
   ```
-##### Appraise the RF Model
+#### Appraise the RF Model
 The perfromance of the RF model was assessed based on the test sample in that error matrix was computed.\
 The evaluation metrics reported include accuracy, precision, recall, and F-score.
 
@@ -471,7 +471,7 @@ print('Validation Kappa: ', accuracy2.kappa())
 print('Validation fscore: ', accuracy2.fscore(1))
 
 ```
-##### Variable Importance
+#### Variable Importance
 The predictor variables were ranked based on their individual performance in discriminating the target classes 
 
 ```JavaScript
@@ -501,7 +501,12 @@ var chart2 = ui.Chart.feature.byProperty({
       vAxis: {title: 'Importance'},
       hAxis: {title: 'Feature'}
   })
+
+//display the chart in the Console
 print(chart2)
+
+// End of the code
+print ('The End')
 
 ```
 
