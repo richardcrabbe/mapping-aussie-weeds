@@ -440,8 +440,7 @@ var finalClassification = composite.classify(optimalModel);
   var mapColours2Use = ee.List(['yellow', 'black']); 
   
   // use the class as index to lookup the corresponding display color
-  return feature.set({style: {color: mapColours2Use.get(label),fillColor: '00000000'}})
-}
+  return feature.set({style: {color: mapColours2Use.get(label),fillColor: '00000000'}})}
   
   ```
 
