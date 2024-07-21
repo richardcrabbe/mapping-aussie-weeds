@@ -325,7 +325,7 @@ var landcover2 = composite.sampleRegions({
   scale: 0.5
 });
 ```
-### Make the class size to be equal 
+### Make the Class Size Equal 
 ```JavaScript
 // filter the training areas by class to examine the number of cases or pixels for each class
 var landcoverClass1 = landcover2.filter(ee.Filter.eq('label', 0))
