@@ -507,19 +507,3 @@ print(chart2)
 print ('The End')
 
 ```
-
-### Bitoubush at Birdies Beach
-
-
-### Bitoubush at Scotts Head
-
-
-
-## **Mapping African Lovegrass (ALG)**
-
-
-
-### ALG at Cooma, NSW
-
-
-### ALG at Kuma Nature Reserve and TSR, NSW
