@@ -23,8 +23,6 @@ The data sets include:
 |---|---|---|
 | Birdies Beach| -33.23352°|151.57426°|
 
-Add an image
-![description] (path)
 
 **Loading the data sets into the Code Editor**
 Caution, the paths for the data sets must be changed to have the code working.
